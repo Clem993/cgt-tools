@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cell & Gene Therapy Investment Dashboard 2025-2027</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            overflow-x: auto;
+        }
+        
+        .nav-tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1em;
+            font-weight: 500;
+            color: #495057;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .nav-tab:hover {
+            background: #e9ecef;
+        }
+        
+        .nav-tab.active {
+            color: #1e3c72;
+            background: white;
+            border-bottom: 3px solid #1e3c72;
+            margin-bottom: -2px;
+        }
+        
+        .tab-content {
+            padding: 40px;
+            min-height: 600px;
+        }
+        
+        .tab-pane {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .tab-pane.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .chart-container {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .chart-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .tool-container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .tool-header {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #1e3c72;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #495057;
+        }
+        
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #1e3c72;
+            box-shadow: 0 0 0 2px rgba(30, 60, 114, 0.1);
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .result-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .result-box h3 {
+            margin-bottom: 10px;
+        }
+        
+        .result-value {
+            font-size: 2em;
+            font-weight: 700;
+        }
+        
+        .matrix-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .score-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+        
+        .score-high {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .score-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .score-low {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .metric-card h4 {
+            color: #495057;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #1e3c72;
+        }
+        
+        .metric-change {
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .metric-change.positive {
+            color: #28a745;
+        }
+        
+        .metric-change.negative {
+            color: #dc3545;
+        }
+        
+        .insight-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #1e3c72;
+        }
+        
+        .insight-box h4 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+        
+        .download-section {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin: 10px;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Cell & Gene Therapy Investment Dashboard</h1>
+            <p>Strategic Analysis & Decision Tools for 2025-2027</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('overview')">Market Overview</button>
+            <button class="nav-tab" onclick="showTab('investment')">Investment Analysis</button>
+            <button class="nav-tab" onclick="showTab('china')">China Strategy</button>
+            <button class="nav-tab" onclick="showTab('manufacturing')">Manufacturing Economics</button>
+            <button class="nav-tab" onclick="showTab('calculator')">Deal Calculator</button>
+            <button class="nav-tab" onclick="showTab('framework')">Decision Frameworks</button>
+        </div>
+        
+        <div class="tab-content">
+            <!-- Market Overview Tab -->
+            <div id="overview" class="tab-pane active">
+                <div class="chart-title">The Investment Paradox: VC Collapse vs M&A Surge</div>
+                
+                <div class="grid-2">
+                    <div class="metric-card">
+                        <h4>VC Funding Decline</h4>
+                        <div class="metric-value">-83%</div>
+                        <div class="metric-change negative">From $8.2B (2021) to $1.4B (2024)</div>
+                    </div>
+                    <div class="metric-card">
+                        <h4>M&A Activity 2025</h4>
+                        <div class="metric-value">$65B</div>
+                        <div class="metric-change positive">+76% vs 2024 Total</div>
+                    </div>
+                    <div class="metric-card">
+                        <h4>FDA Approvals 2024</h4>
+                        <div class="metric-value">7</div>
+                        <div class="metric-change positive">Path to 10-20/year by 2025</div>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Blockbuster Success Rate</h4>
+                        <div class="metric-value">4.3%</div>
+                        <div class="metric-change negative">Only 2 of 46 approved</div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="fundingChart"></canvas>
+                </div>
+                
+                <div class="insight-box">
+                    <h4>💡 Key Insight</h4>
+                    <p>The 83% collapse in VC funding coupled with record M&A activity creates optimal conditions for strategic acquirers. Quality assets are available at 50-70% discount to 2021 valuations, while proven technologies command premium multiples.</p>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-title">Commercial Performance: The Blockbuster Gap</div>
+                    <canvas id="salesChart"></canvas>
+                </div>
+                
+                <div class="matrix-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Therapy</th>
+                                <th>Annual Sales</th>
+                                <th>Manufacturing Time</th>
+                                <th>Success Factor</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Yescarta (Gilead)</strong></td>
+                                <td>$1.6B</td>
+                                <td>14 days</td>
+                                <td>Speed to delivery</td>
+                                <td><span class="score-badge score-high">Blockbuster</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Zolgensma (Novartis)</strong></td>
+                                <td>$1.2B</td>
+                                <td>One-time</td>
+                                <td>Cure narrative</td>
+                                <td><span class="score-badge score-high">Blockbuster</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Carvykti (J&J)</strong></td>
+                                <td>$963M</td>
+                                <td>24 days</td>
+                                <td>J&J commercialization</td>
+                                <td><span class="score-badge score-medium">Near-Blockbuster</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Kymriah (Novartis)</strong></td>
+                                <td>$443M</td>
+                                <td>54 days</td>
+                                <td>First-to-market</td>
+                                <td><span class="score-badge score-low">Underperforming</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Casgevy (Vertex/CRISPR)</strong></td>
+                                <td>$2M (Q3'24)</td>
+                                <td>8+ weeks</td>
+                                <td>CRISPR pioneer</td>
+                                <td><span class="score-badge score-low">Launch Phase</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Investment Analysis Tab -->
+            <div id="investment" class="tab-pane">
+                <div class="chart-title">Capital Flow Analysis: From Exits to Entries</div>
+                <div id="sankeyChart"></div>
+                
+                <div class="tool-container">
+                    <div class="tool-header">In Vivo Value Premium Calculator</div>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label>Base Phase 1 Ex Vivo Valuation ($M)</label>
+                            <input type="number" id="baseValuation" value="100" min="10" max="1000">
+                        </div>
+                        <div class="input-group">
+                            <label>Development Stage</label>
+                            <select id="devStage">
+                                <option value="1">Preclinical</option>
+                                <option value="1.5">Phase 1</option>
+                                <option value="2">Phase 2</option>
+                                <option value="3">Phase 3</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>In Vivo Delivery Platform</label>
+                            <select id="inVivoDelivery">
+                                <option value="1">No</option>
+                                <option value="3">Yes - Novel</option>
+                                <option value="2">Yes - Validated</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Lymphodepletion Required</label>
+                            <select id="lymphodepletion">
+                                <option value="1">Yes</option>
+                                <option value="1.5">No</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Redosable</label>
+                            <select id="redosable">
+                                <option value="1">No</option>
+                                <option value="2">Yes</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Multi-Indication Potential</label>
+                            <select id="multiIndication">
+                                <option value="1">Single</option>
+                                <option value="1.5">2-3 Indications</option>
+                                <option value="2">Platform (4+)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="calculatePremium()">Calculate Valuation</button>
+                    <div id="premiumResult"></div>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-title">Deal Structure Evolution 2021-2025</div>
+                    <canvas id="dealStructureChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- China Strategy Tab -->
+            <div id="china" class="tab-pane">
+                <div class="chart-title">China's CGT Innovation Landscape</div>
+                
+                <div class="grid-2">
+                    <div class="metric-card">
+                        <h4>Global Patent Share</h4>
+                        <div class="metric-value">56%</div>
+                        <div class="metric-change positive">China leads innovation</div>
+                    </div>
+                    <div class="metric-card">
+                        <h4>CAR-T Trial Share</h4>
+                        <div class="metric-value">50%+</div>
+                        <div class="metric-change positive">Of global trials</div>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Cost Advantage</h4>
+                        <div class="metric-value">30-50%</div>
+                        <div class="metric-change positive">Lower than US/EU</div>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Approval Rate</h4>
+                        <div class="metric-value">80%</div>
+                        <div class="metric-change positive">IND success rate</div>
+                    </div>
+                </div>
+                
+                <div id="chinaHeatmap"></div>
+                
+                <div class="tool-container">
+                    <div class="tool-header">China Partnership Decision Matrix</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Factor</th>
+                                <th>Go Alone</th>
+                                <th>Joint Venture</th>
+                                <th>License Deal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>IP Control</strong></td>
+                                <td><span class="score-badge score-high">High</span></td>
+                                <td><span class="score-badge score-medium">Medium</span></td>
+                                <td><span class="score-badge score-low">Low</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Speed to Market</strong></td>
+                                <td>24-36 months</td>
+                                <td>12-18 months</td>
+                                <td>6-12 months</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Investment Required</strong></td>
+                                <td>$500M+</td>
+                                <td>$200-300M</td>
+                                <td>$50-100M</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Regulatory Risk</strong></td>
+                                <td><span class="score-badge score-low">High</span></td>
+                                <td><span class="score-badge score-medium">Shared</span></td>
+                                <td><span class="score-badge score-high">Low</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>BIOSECURE Act Impact</strong></td>
+                                <td><span class="score-badge score-low">High</span></td>
+                                <td><span class="score-badge score-medium">Medium</span></td>
+                                <td><span class="score-badge score-high">Low</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Revenue Share</strong></td>
+                                <td>100%</td>
+                                <td>40-60%</td>
+                                <td>10-20% royalty</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="insight-box" style="margin-top: 20px;">
+                        <h4>🎯 Strategic Recommendation</h4>
+                        <p><strong>For Phase 1-2 Assets:</strong> Joint Venture provides optimal balance of speed, cost, and control<br>
+                        <strong>For Platform Technologies:</strong> License deals enable rapid validation with minimal investment<br>
+                        <strong>For Late-Stage Assets:</strong> Go alone if you have local expertise, otherwise JV with established player</p>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-title">Cross-Border Deal Flow 2020-2025</div>
+                    <canvas id="chinaDealChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Manufacturing Economics Tab -->
+            <div id="manufacturing" class="tab-pane">
+                <div class="chart-title">Manufacturing Cost Waterfall: Path to Profitability</div>
+                <div id="waterfallChart"></div>
+                
+                <div class="tool-container">
+                    <div class="tool-header">Manufacturing ROI Calculator</div>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label>Current Cost per Dose ($)</label>
+                            <input type="number" id="currentCost" value="95000" min="1000" max="500000">
+                        </div>
+                        <div class="input-group">
+                            <label>Annual Production Volume</label>
+                            <input type="number" id="annualVolume" value="500" min="10" max="10000">
+                        </div>
+                        <div class="input-group">
+                            <label>Manufacturing Approach</label>
+                            <select id="mfgApproach">
+                                <option value="manual">Manual (Traditional)</option>
+                                <option value="semi">Semi-Automated</option>
+                                <option value="full">Fully Automated</option>
+                                <option value="allogeneic">Allogeneic Platform</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Vein-to-Vein Time (Days)</label>
+                            <input type="number" id="veinTime" value="30" min="7" max="90">
+                        </div>
+                        <div class="input-group">
+                            <label>Batch Failure Rate (%)</label>
+                            <input type="number" id="failureRate" value="5" min="0" max="20">
+                        </div>
+                        <div class="input-group">
+                            <label>Automation Investment ($M)</label>
+                            <input type="number" id="automationInvest" value="50" min="0" max="500">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="calculateManufacturing()">Calculate ROI</button>
+                    <div id="mfgResult"></div>
+                </div>
+                
+                <div class="matrix-container">
+                    <div class="tool-header">Manufacturing Platform Comparison</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Platform</th>
+                                <th>Cost Reduction</th>
+                                <th>Capacity Increase</th>
+                                <th>Time to Market</th>
+                                <th>Investment Required</th>
+                                <th>Risk Profile</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Cellares Cell Shuttle</strong></td>
+                                <td>50%</td>
+                                <td>10x</td>
+                                <td>7 days</td>
+                                <td>$100-150M</td>
+                                <td><span class="score-badge score-medium">Medium</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ori Biotech IRO</strong></td>
+                                <td>40%</td>
+                                <td>8x</td>
+                                <td>10 days</td>
+                                <td>$80-120M</td>
+                                <td><span class="score-badge score-medium">Medium</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Lonza Cocoon</strong></td>
+                                <td>35%</td>
+                                <td>5x</td>
+                                <td>14 days</td>
+                                <td>$60-100M</td>
+                                <td><span class="score-badge score-high">Low</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Miltenyi CliniMACS</strong></td>
+                                <td>30%</td>
+                                <td>4x</td>
+                                <td>16 days</td>
+                                <td>$40-80M</td>
+                                <td><span class="score-badge score-high">Low</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Traditional Manual</strong></td>
+                                <td>0%</td>
+                                <td>1x</td>
+                                <td>30+ days</td>
+                                <td>$20-40M</td>
+                                <td><span class="score-badge score-low">High</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Deal Calculator Tab -->
+            <div id="calculator" class="tab-pane">
+                <div class="tool-container">
+                    <div class="tool-header">CGT Deal Structure Analyzer</div>
+                    
+                    <div class="grid-2">
+                        <div>
+                            <h4>Deal Parameters</h4>
+                            <div class="input-group">
+                                <label>Total Deal Value ($M)</label>
+                                <input type="number" id="totalDealValue" value="1000" min="50" max="5000">
+                            </div>
+                            <div class="input-group">
+                                <label>Upfront Payment (%)</label>
+                                <input type="range" id="upfrontPercent" value="5" min="1" max="30" oninput="updateSliderValue('upfrontPercent')">
+                                <span id="upfrontPercentValue">5%</span>
+                            </div>
+                            <div class="input-group">
+                                <label>Development Milestones (%)</label>
+                                <input type="range" id="devMilestonePercent" value="25" min="10" max="50" oninput="updateSliderValue('devMilestonePercent')">
+                                <span id="devMilestonePercentValue">25%</span>
+                            </div>
+                            <div class="input-group">
+                                <label>Commercial Milestones (%)</label>
+                                <input type="range" id="commercialPercent" value="70" min="30" max="80" oninput="updateSliderValue('commercialPercent')">
+                                <span id="commercialPercentValue">70%</span>
+                            </div>
+                            <div class="input-group">
+                                <label>Peak Sales Estimate ($M)</label>
+                                <input type="number" id="peakSales" value="500" min="50" max="3000">
+                            </div>
+                            <div class="input-group">
+                                <label>Royalty Rate (%)</label>
+                                <input type="range" id="royaltyRate" value="10" min="3" max="25" oninput="updateSliderValue('royaltyRate')">
+                                <span id="royaltyRateValue">10%</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4>Risk Adjustments</h4>
+                            <div class="input-group">
+                                <label>Development Stage</label>
+                                <select id="riskStage">
+                                    <option value="0.1">Preclinical</option>
+                                    <option value="0.2">Phase 1</option>
+                                    <option value="0.35">Phase 2</option>
+                                    <option value="0.6">Phase 3</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Modality Risk Factor</label>
+                                <select id="modalityRisk">
+                                    <option value="0.5">Autologous CAR-T</option>
+                                    <option value="0.4">Allogeneic CAR-T</option>
+                                    <option value="0.6">AAV Gene Therapy</option>
+                                    <option value="0.3">In Vivo Gene Editing</option>
+                                    <option value="0.7">Small Molecule</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Competitive Landscape</label>
+                                <select id="competitive">
+                                    <option value="0.8">First-in-Class</option>
+                                    <option value="0.6">Best-in-Class</option>
+                                    <option value="0.4">Me-Too</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Manufacturing Readiness</label>
+                                <select id="mfgReadiness">
+                                    <option value="0.9">Commercial Ready</option>
+                                    <option value="0.7">Validated Process</option>
+                                    <option value="0.5">Early Development</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn" onclick="calculateDealValue()">Analyze Deal Structure</button>
+                    <div id="dealAnalysisResult"></div>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-title">Payment Structure Timeline</div>
+                    <canvas id="paymentTimeline"></canvas>
+                </div>
+            </div>
+            
+            <!-- Decision Frameworks Tab -->
+            <div id="framework" class="tab-pane">
+                <div class="tool-container">
+                    <div class="tool-header">Portfolio Construction Framework: The 30-40-30 Rule</div>
+                    <div id="portfolioPie"></div>
+                    
+                    <div class="insight-box">
+                        <h4>📊 Optimal Portfolio Allocation</h4>
+                        <p><strong>30% Late-Stage/Commercial:</strong> Cash generation and near-term revenue<br>
+                        <strong>40% Phase 1-2:</strong> Near-term value inflection opportunities<br>
+                        <strong>30% Platform/Discovery:</strong> Long-term optionality and innovation</p>
+                    </div>
+                </div>
+                
+                <div class="tool-container">
+                    <div class="tool-header">Investment Screening Scorecard</div>
+                    <div class="grid-2">
+                        <div>
+                            <h4>Technical Factors</h4>
+                            <label><input type="checkbox" id="mfgDiff" value="3"> Manufacturing Differentiation (3 pts)</label><br>
+                            <label><input type="checkbox" id="subWeek" value="2"> Sub-14 Day Turnaround (2 pts)</label><br>
+                            <label><input type="checkbox" id="cdmo" value="2"> CDMO Partnerships Secured (2 pts)</label><br>
+                            <label><input type="checkbox" id="automation" value="3"> Automation Platform (3 pts)</label><br>
+                            <label><input type="checkbox" id="inVivo" value="3"> In Vivo Delivery (3 pts)</label><br>
+                        </div>
+                        <div>
+                            <h4>Commercial Factors</h4>
+                            <label><input type="checkbox" id="orphan" value="2"> Orphan Designation (2 pts)</label><br>
+                            <label><input type="checkbox" id="rmat" value="2"> RMAT/Breakthrough (2 pts)</label><br>
+                            <label><input type="checkbox" id="unmet" value="3"> High Unmet Need (3 pts)</label><br>
+                            <label><input type="checkbox" id="reimbursement" value="2"> Clear Reimbursement Path (2 pts)</label><br>
+                            <label><input type="checkbox" id="competition" value="2"> Limited Competition (2 pts)</label><br>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="calculateInvestmentScore()">Calculate Score</button>
+                    <div id="scoreResult"></div>
+                </div>
+                
+                <div class="tool-container">
+                    <div class="tool-header">Red Flags Checklist</div>
+                    <div style="column-count: 2; column-gap: 30px;">
+                        <h4 style="color: #dc3545;">Manufacturing Risks</h4>
+                        <ul>
+                            <li>Single-source supplier dependency</li>
+                            <li>No CDMO capacity secured</li>
+                            <li>Batch failure rate >10%</li>
+                            <li>Vein-to-vein >4 weeks</li>
+                            <li>No comparability data</li>
+                        </ul>
+                        
+                        <h4 style="color: #dc3545;">Clinical Concerns</h4>
+                        <ul>
+                            <li>Surrogate endpoints only</li>
+                            <li>High dropout rates</li>
+                            <li>Unresolved safety signals</li>
+                            <li>No dose-response established</li>
+                            <li>Small patient population</li>
+                        </ul>
+                        
+                        <h4 style="color: #dc3545;">Commercial Challenges</h4>
+                        <ul>
+                            <li>Crowded competitive landscape</li>
+                            <li>Pricing >$3M without outcomes data</li>
+                            <li>Effective standard of care exists</li>
+                            <li>No KOL support</li>
+                            <li>Complex administration</li>
+                        </ul>
+                        
+                        <h4 style="color: #dc3545;">Management Red Flags</h4>
+                        <ul>
+                            <li>Unrealistic timelines</li>
+                            <li>No CMC expertise</li>
+                            <li><18 months runway</li>
+                            <li>Frequent strategic pivots</li>
+                            <li>No pharma experience</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="download-section">
+                    <h3>Download Complete Toolkit</h3>
+                    <p>Get all frameworks, calculators, and analysis templates</p>
+                    <a href="#" class="download-btn" onclick="downloadTools()">📊 Download Excel Toolkit</a>
+                    <a href="#" class="download-btn" onclick="downloadReport()">📄 Download Full Report</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Tab navigation
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-pane');
+            const navTabs = document.querySelectorAll('.nav-tab');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            navTabs.forEach(navTab => navTab.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // Initialize charts
+        window.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+        });
+        
+        function initializeCharts() {
+            // Funding Chart
+            const fundingCtx = document.getElementById('fundingChart').getContext('2d');
+            new Chart(fundingCtx, {
+                type: 'line',
+                data: {
+                    labels: ['2020', '2021', '2022', '2023', '2024', '2025 YTD'],
+                    datasets: [{
+                        label: 'VC Funding ($B)',
+                        data: [5.2, 8.2, 4.8, 2.3, 1.4, 0.9],
+                        borderColor: '#dc3545',
+                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'M&A Activity ($B)',
+                        data: [12, 18, 25, 38, 45, 65],
+                        borderColor: '#28a745',
+                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'The Investment Divergence: VC vs M&A'
+                        }
+                    }
+                }
+            });
+            
+            // Sales Performance Chart
+            const salesCtx = document.getElementById('salesChart').getContext('2d');
+            new Chart(salesCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Yescarta', 'Zolgensma', 'Carvykti', 'Breyanzi', 'Kymriah', 'Casgevy'],
+                    datasets: [{
+                        label: '2024 Revenue ($M)',
+                        data: [1600, 1200, 963, 747, 443, 2],
+                        backgroundColor: [
+                            '#28a745',
+                            '#28a745',
+                            '#ffc107',
+                            '#ffc107',
+                            '#dc3545',
+                            '#dc3545'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Commercial Performance Hierarchy'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            
+            // Deal Structure Evolution
+            const dealCtx = document.getElementById('dealStructureChart').getContext('2d');
+            new Chart(dealCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Upfront', 'Development Milestones', 'Commercial Milestones'],
+                    datasets: [{
+                        label: '2021 Structure',
+                        data: [15, 35, 50],
+                        backgroundColor: 'rgba(102, 126, 234, 0.6)'
+                    }, {
+                        label: '2025 Structure',
+                        data: [5, 25, 70],
+                        backgroundColor: 'rgba(118, 75, 162, 0.6)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Risk Shifting: Deal Structure Evolution (%)'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+            
+            // China Deal Flow
+            const chinaCtx = document.getElementById('chinaDealChart').getContext('2d');
+            new Chart(chinaCtx, {
+                type: 'line',
+                data: {
+                    labels: ['2020', '2021', '2022', '2023', '2024', '2025'],
+                    datasets: [{
+                        label: 'China Out-licensing ($B)',
+                        data: [0.8, 1.2, 2.1, 3.5, 4.8, 6.2],
+                        borderColor: '#dc3545',
+                        tension: 0.4
+                    }, {
+                        label: 'China In-licensing ($B)',
+                        data: [1.5, 2.3, 2.8, 3.2, 3.8, 4.5],
+                        borderColor: '#007bff',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'China Cross-Border Deal Evolution'
+                        }
+                    }
+                }
+            });
+            
+            // Payment Timeline
+            const timelineCtx = document.getElementById('paymentTimeline').getContext('2d');
+            new Chart(timelineCtx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Payment Schedule',
+                        data: [
+                            {x: 0, y: 50},
+                            {x: 6, y: 30},
+                            {x: 12, y: 50},
+                            {x: 24, y: 100},
+                            {x: 36, y: 150},
+                            {x: 48, y: 200},
+                            {x: 60, y: 300}
+                        ],
+                        backgroundColor: '#667eea',
+                        pointRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Typical Milestone Payment Schedule'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Months from Signing'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Payment ($M)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Plotly Charts
+            initializePlotlyCharts();
+        }
+        
+        function initializePlotlyCharts() {
+            // Sankey Diagram
+            const sankeyData = {
+                type: "sankey",
+                node: {
+                    pad: 15,
+                    thickness: 30,
+                    line: {
+                        color: "black",
+                        width: 0.5
+                    },
+                    label: ["Takeda Exit", "Roche Exit", "Pfizer Exit", "Gilead Pivot", "AstraZeneca", "Eli Lilly", "AbbVie", "In Vivo Platforms", "Allogeneic CAR-T", "Gene Editing"],
+                    color: ["#dc3545", "#dc3545", "#dc3545", "#ffc107", "#28a745", "#28a745", "#28a745", "#667eea", "#667eea", "#667eea"]
+                },
+                link: {
+                    source: [0, 1, 2, 3, 4, 5, 6],
+                    target: [7, 7, 7, 7, 8, 9, 7],
+                    value: [394, 730, 1000, 350, 3000, 1500, 2100]
+                }
+            };
+            
+            Plotly.newPlot('sankeyChart', [sankeyData], {
+                title: "Capital Reallocation: From Ex Vivo Exits to In Vivo Investments ($M)",
+                font: {size: 12}
+            });
+            
+            // China Heatmap
+            const heatmapData = [{
+                z: [[56, 28, 16], [50, 35, 15], [80, 65, 55], [40, 70, 90]],
+                x: ['China', 'US', 'Europe'],
+                y: ['Patent Share (%)', 'Clinical Trials (%)', 'Approval Rate (%)', 'Cost Index'],
+                type: 'heatmap',
+                colorscale: 'Viridis'
+            }];
+            
+            Plotly.newPlot('chinaHeatmap', heatmapData, {
+                title: 'Global CGT Competitiveness Matrix',
+                xaxis: {title: 'Region'},
+                yaxis: {title: 'Metric'}
+            });
+            
+            // Manufacturing Waterfall
+            const waterfallData = [{
+                name: 'Cost Evolution',
+                type: 'waterfall',
+                orientation: 'v',
+                measure: ['relative', 'relative', 'relative', 'relative', 'relative', 'total'],
+                x: ['Current Manual', 'Process Optimization', 'Semi-Automation', 'Full Automation', 'Allogeneic Platform', 'Final Cost'],
+                textposition: 'outside',
+                text: ['$95,000', '-$15,000', '-$25,000', '-$35,000', '-$15,540', '$4,460'],
+                y: [95000, -15000, -25000, -35000, -15540, 4460],
+                connector: {line: {color: 'rgb(63, 63, 63)'}},
+                decreasing: {marker: {color: '#28a745'}},
+                increasing: {marker: {color: '#dc3545'}},
+                totals: {marker: {color: '#667eea'}}
+            }];
+            
+            Plotly.newPlot('waterfallChart', waterfallData, {
+                title: 'Manufacturing Cost Reduction Pathway ($/dose)',
+                showlegend: false
+            });
+            
+            // Portfolio Pie
+            const portfolioData = [{
+                values: [30, 40, 30],
+                labels: ['Late-Stage/Commercial', 'Phase 1-2', 'Platform/Discovery'],
+                type: 'pie',
+                marker: {
+                    colors: ['#28a745', '#ffc107', '#667eea']
+                }
+            }];
+            
+            Plotly.newPlot('portfolioPie', portfolioData, {
+                title: 'Optimal CGT Portfolio Allocation'
+            });
+        }
+        
+        // Calculator Functions
+        function calculatePremium() {
+            const base = parseFloat(document.getElementById('baseValuation').value);
+            const stage = parseFloat(document.getElementById('devStage').value);
+            const inVivo = parseFloat(document.getElementById('inVivoDelivery').value);
+            const lympho = parseFloat(document.getElementById('lymphodepletion').value);
+            const redose = parseFloat(document.getElementById('redosable').value);
+            const multi = parseFloat(document.getElementById('multiIndication').value);
+            
+            const multiplier = stage * inVivo * lympho * redose * multi;
+            const finalValue = base * multiplier;
+            const premium = ((multiplier - 1) * 100).toFixed(0);
+            
+            const resultDiv = document.getElementById('premiumResult');
+            resultDiv.innerHTML = `
+                <div class="result-box">
+                    <h3>Valuation Analysis</h3>
+                    <div class="result-value">$${finalValue.toFixed(0)}M</div>
+                    <p>Total Multiplier: ${multiplier.toFixed(2)}x</p>
+                    <p>Premium over Ex Vivo: ${premium}%</p>
+                </div>
+            `;
+        }
+        
+        function calculateManufacturing() {
+            const currentCost = parseFloat(document.getElementById('currentCost').value);
+            const volume = parseFloat(document.getElementById('annualVolume').value);
+            const approach = document.getElementById('mfgApproach').value;
+            const veinTime = parseFloat(document.getElementById('veinTime').value);
+            const failureRate = parseFloat(document.getElementById('failureRate').value) / 100;
+            const investment = parseFloat(document.getElementById('automationInvest').value) * 1000000;
+            
+            let costReduction = 0;
+            let capacityIncrease = 1;
+            
+            switch(approach) {
+                case 'semi':
+                    costReduction = 0.3;
+                    capacityIncrease = 3;
+                    break;
+                case 'full':
+                    costReduction = 0.5;
+                    capacityIncrease = 10;
+                    break;
+                case 'allogeneic':
+                    costReduction = 0.95;
+                    capacityIncrease = 50;
+                    break;
+            }
+            
+            const newCost = currentCost * (1 - costReduction);
+            const newVolume = volume * capacityIncrease;
+            const annualSavings = (currentCost - newCost) * newVolume * (1 - failureRate);
+            const payback = investment / annualSavings;
+            const fiveYearROI = ((annualSavings * 5 - investment) / investment * 100).toFixed(0);
+            
+            const resultDiv = document.getElementById('mfgResult');
+            resultDiv.innerHTML = `
+                <div class="result-box">
+                    <h3>Manufacturing ROI Analysis</h3>
+                    <div class="result-value">${fiveYearROI}% ROI</div>
+                    <p>New Cost per Dose: $${newCost.toFixed(0)}</p>
+                    <p>Annual Capacity: ${newVolume.toFixed(0)} doses</p>
+                    <p>Annual Savings: $${(annualSavings/1000000).toFixed(1)}M</p>
+                    <p>Payback Period: ${payback.toFixed(1)} years</p>
+                </div>
+            `;
+        }
+        
+        function calculateDealValue() {
+            const totalValue = parseFloat(document.getElementById('totalDealValue').value);
+            const upfront = parseFloat(document.getElementById('upfrontPercent').value) / 100;
+            const devMilestone = parseFloat(document.getElementById('devMilestonePercent').value) / 100;
+            const commercial = parseFloat(document.getElementById('commercialPercent').value) / 100;
+            const peakSales = parseFloat(document.getElementById('peakSales').value);
+            const royalty = parseFloat(document.getElementById('royaltyRate').value) / 100;
+            
+            const stage = parseFloat(document.getElementById('riskStage').value);
+            const modality = parseFloat(document.getElementById('modalityRisk').value);
+            const competitive = parseFloat(document.getElementById('competitive').value);
+            const mfgReady = parseFloat(document.getElementById('mfgReadiness').value);
+            
+            const riskFactor = stage * modality * competitive * mfgReady;
+            const riskAdjustedValue = totalValue * riskFactor;
+            const expectedRoyalties = peakSales * royalty * 7; // 7 years peak sales
+            const totalExpectedValue = riskAdjustedValue + expectedRoyalties;
+            
+            const resultDiv = document.getElementById('dealAnalysisResult');
+            resultDiv.innerHTML = `
+                <div class="result-box">
+                    <h3>Deal Structure Analysis</h3>
+                    <div class="result-value">$${totalExpectedValue.toFixed(0)}M</div>
+                    <p>Risk-Adjusted Deal Value: $${riskAdjustedValue.toFixed(0)}M</p>
+                    <p>Expected Royalties (7yr): $${expectedRoyalties.toFixed(0)}M</p>
+                    <p>Probability of Success: ${(riskFactor * 100).toFixed(0)}%</p>
+                    <hr style="margin: 10px 0; opacity: 0.3;">
+                    <p><strong>Payment Structure:</strong></p>
+                    <p>Upfront: $${(totalValue * upfront).toFixed(0)}M</p>
+                    <p>Development: $${(totalValue * devMilestone).toFixed(0)}M</p>
+                    <p>Commercial: $${(totalValue * commercial).toFixed(0)}M</p>
+                </div>
+            `;
+        }
+        
+        function calculateInvestmentScore() {
+            let score = 0;
+            const checkboxes = [
+                'mfgDiff', 'subWeek', 'cdmo', 'automation', 'inVivo',
+                'orphan', 'rmat', 'unmet', 'reimbursement', 'competition'
+            ];
+            
+            checkboxes.forEach(id => {
+                const checkbox = document.getElementById(id);
+                if (checkbox.checked) {
+                    score += parseInt(checkbox.value);
+                }
+            });
+            
+            let recommendation = '';
+            let badgeClass = '';
+            
+            if (score >= 15) {
+                recommendation = 'Strong Investment Candidate';
+                badgeClass = 'score-high';
+            } else if (score >= 10) {
+                recommendation = 'Positive - Proceed with Diligence';
+                badgeClass = 'score-medium';
+            } else if (score >= 7) {
+                recommendation = 'Monitor Closely';
+                badgeClass = 'score-medium';
+            } else {
+                recommendation = 'Pass or Wait for Progress';
+                badgeClass = 'score-low';
+            }
+            
+            const resultDiv = document.getElementById('scoreResult');
+            resultDiv.innerHTML = `
+                <div class="result-box">
+                    <h3>Investment Score</h3>
+                    <div class="result-value">${score}/22</div>
+                    <p><span class="score-badge ${badgeClass}">${recommendation}</span></p>
+                </div>
+            `;
+        }
+        
+        function updateSliderValue(sliderId) {
+            const slider = document.getElementById(sliderId);
+            const valueDisplay = document.getElementById(sliderId + 'Value');
+            valueDisplay.textContent = slider.value + '%';
+        }
+        
+        function downloadTools() {
+            alert('Excel toolkit download would be initiated here. This would include:\n\n• Deal Structure Analyzer\n• Manufacturing ROI Calculator\n• Portfolio Construction Model\n• Investment Screening Scorecard\n• China Partnership Decision Matrix');
+        }
+        
+        function downloadReport() {
+            alert('Full PDF report download would be initiated here. This would include:\n\n• Executive Summary\n• Market Analysis\n• Investment Frameworks\n• Case Studies\n• Strategic Recommendations');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGT Deal Calculator - Quick Share Version</title>
+    <meta name="description" content="Free risk-adjusted valuation calculator for cell and gene therapy deals">
+    
+    <!-- Open Graph tags for LinkedIn sharing -->
+    <meta property="og:title" content="CGT Deal Structure Calculator - Free Tool">
+    <meta property="og:description" content="Calculate risk-adjusted valuations for cell and gene therapy transactions">
+    <meta property="og:type" content="website">
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .intro {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+        
+        .input-section {
+            margin: 20px 0;
+        }
+        
+        .input-group {
+            margin: 15px 0;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        input[type="range"] {
+            margin: 10px 0;
+        }
+        
+        .slider-value {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .results {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 8px;
+        }
+        
+        .results.show {
+            display: block;
+        }
+        
+        .result-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+        }
+        
+        .result-label {
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .result-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .share-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e7f3ff;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .share-btn {
+            background: #0077b5;
+            color: white;
+            padding: 8px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 5px;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .share-section, button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CGT Deal Structure Calculator</h1>
+        
+        <div class="intro">
+            <strong>Quick Risk-Adjusted Valuation Tool</strong><br>
+            Calculate the true expected value of cell & gene therapy deals based on probability of success and risk factors.
+        </div>
+        
+        <div class="input-section">
+            <h3>Deal Parameters</h3>
+            
+            <div class="input-group">
+                <label>Total Deal Value ($M)</label>
+                <input type="number" id="dealValue" value="1000" min="10" max="5000">
+            </div>
+            
+            <div class="input-group">
+                <label>Development Stage</label>
+                <select id="stage">
+                    <option value="0.1">Preclinical (10% PoS)</option>
+                    <option value="0.2" selected>Phase 1 (20% PoS)</option>
+                    <option value="0.35">Phase 2 (35% PoS)</option>
+                    <option value="0.6">Phase 3 (60% PoS)</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label>Therapy Type</label>
+                <select id="therapy">
+                    <option value="0.6">Autologous CAR-T</option>
+                    <option value="0.4">Allogeneic CAR-T</option>
+                    <option value="0.5">AAV Gene Therapy</option>
+                    <option value="0.3">In Vivo Gene Editing</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label>Upfront Payment: <span class="slider-value" id="upfrontVal">5%</span></label>
+                <input type="range" id="upfront" min="1" max="30" value="5" oninput="updateSlider('upfront')">
+            </div>
+            
+            <div class="input-group">
+                <label>Development Milestones: <span class="slider-value" id="devMilestoneVal">25%</span></label>
+                <input type="range" id="devMilestone" min="10" max="40" value="25" oninput="updateSlider('devMilestone')">
+            </div>
+            
+            <div class="input-group">
+                <label>Commercial Milestones: <span class="slider-value" id="commercialVal">70%</span></label>
+                <input type="range" id="commercial" min="30" max="85" value="70" oninput="updateSlider('commercial')">
+            </div>
+            
+            <div class="input-group">
+                <label>Peak Sales Estimate ($M)</label>
+                <input type="number" id="peakSales" value="500" min="50" max="3000">
+            </div>
+            
+            <div class="input-group">
+                <label>Royalty Rate: <span class="slider-value" id="royaltyVal">12%</span></label>
+                <input type="range" id="royalty" min="3" max="25" value="12" oninput="updateSlider('royalty')">
+            </div>
+        </div>
+        
+        <button onclick="calculate()">Calculate Risk-Adjusted Value</button>
+        
+        <div class="results" id="results">
+            <h3>Risk-Adjusted Valuation Results</h3>
+            
+            <div class="result-item">
+                <div class="result-label">Overall Probability of Success</div>
+                <div class="result-value" id="posResult">--%</div>
+            </div>
+            
+            <div class="result-item">
+                <div class="result-label">Expected Deal Value (Risk-Adjusted)</div>
+                <div class="result-value" id="dealResult">$--M</div>
+            </div>
+            
+            <div class="result-item">
+                <div class="result-label">Expected Royalty Value (7-Year NPV)</div>
+                <div class="result-value" id="royaltyResult">$--M</div>
+            </div>
+            
+            <div class="result-item">
+                <div class="result-label">Total Expected Value</div>
+                <div class="result-value" id="totalResult" style="color: #28a745;">$--M</div>
+            </div>
+            
+            <div class="result-item">
+                <div class="result-label">Value vs Headline Ratio</div>
+                <div class="result-value" id="ratioResult">--%</div>
+            </div>
+        </div>
+        
+        <div class="share-section" id="shareSection" style="display: none;">
+            <p><strong>Find this helpful?</strong></p>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=[YOUR-URL]" target="_blank" class="share-btn">Share on LinkedIn</a>
+            <a href="#" onclick="window.print()" class="share-btn" style="background: #6c757d;">Print Results</a>
+        </div>
+        
+        <div class="footer">
+            <p>Free tool for the biopharma BD community</p>
+            <p>Created by [Your Name] | <a href="https://linkedin.com/in/[your-profile]">LinkedIn</a></p>
+            <p>Based on analysis of 46 FDA approvals and industry success rates</p>
+        </div>
+    </div>
+    
+    <script>
+        function updateSlider(id) {
+            const value = document.getElementById(id).value;
+            document.getElementById(id + 'Val').textContent = value + '%';
+        }
+        
+        function calculate() {
+            // Get inputs
+            const dealValue = parseFloat(document.getElementById('dealValue').value);
+            const stage = parseFloat(document.getElementById('stage').value);
+            const therapy = parseFloat(document.getElementById('therapy').value);
+            const upfront = parseFloat(document.getElementById('upfront').value) / 100;
+            const devMilestone = parseFloat(document.getElementById('devMilestone').value) / 100;
+            const commercial = parseFloat(document.getElementById('commercial').value) / 100;
+            const peakSales = parseFloat(document.getElementById('peakSales').value);
+            const royalty = parseFloat(document.getElementById('royalty').value) / 100;
+            
+            // Calculate probability of success
+            const mfgRisk = 0.7; // Default manufacturing risk
+            const competitiveRisk = 0.8; // Default competitive position
+            const reimbursementRisk = 0.7; // Default reimbursement risk
+            
+            const overallPOS = stage * therapy * mfgRisk * competitiveRisk * reimbursementRisk;
+            
+            // Calculate expected deal payments
+            const upfrontPayment = dealValue * upfront;
+            const expectedDev = dealValue * devMilestone * stage;
+            const expectedComm = dealValue * commercial * overallPOS;
+            const expectedDealValue = upfrontPayment + expectedDev + expectedComm;
+            
+            // Calculate royalty NPV (simplified 7-year model)
+            const royaltyNPV = peakSales * royalty * 7 * 0.6; // Simplified NPV factor
+            const expectedRoyalty = royaltyNPV * overallPOS;
+            
+            // Total expected value
+            const totalExpected = expectedDealValue + expectedRoyalty;
+            const ratio = (totalExpected / dealValue) * 100;
+            
+            // Display results
+            document.getElementById('posResult').textContent = (overallPOS * 100).toFixed(1) + '%';
+            document.getElementById('dealResult').textContent = '$' + expectedDealValue.toFixed(0) + 'M';
+            document.getElementById('royaltyResult').textContent = '$' + expectedRoyalty.toFixed(0) + 'M';
+            document.getElementById('totalResult').textContent = '$' + totalExpected.toFixed(0) + 'M';
+            document.getElementById('ratioResult').textContent = ratio.toFixed(0) + '%';
+            
+            document.getElementById('results').classList.add('show');
+            document.getElementById('shareSection').style.display = 'block';
+            
+            // Auto-scroll to results
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Add keyboard support
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculate();
+            }
+        });
+    </script>
+</body>
+</html>
