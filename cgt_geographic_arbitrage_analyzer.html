@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGT Geographic Arbitrage Analyzer | Strategic Framework for 2025-2027</title>
+    <meta name="description" content="Professional tool for analyzing CGT geographic arbitrage opportunities based on manufacturing economics">
+    
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-bottom: 4px solid #e74c3c;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+        
+        .header .author {
+            color: #3498db;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+        
+        .methodology-note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 5px;
+        }
+        
+        .methodology-note h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 20px;
+            background: #ecf0f1;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: #7f8c8d;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #2c3e50;
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #e74c3c;
+        }
+        
+        .content {
+            background: white;
+            padding: 30px;
+            border-radius: 0 0 10px 10px;
+            min-height: 600px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #3498db;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.95em;
+        }
+        
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .slider-container {
+            margin: 15px 0;
+        }
+        
+        .slider-value {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-left: 10px;
+            font-weight: 600;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .calculate-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            margin: 30px auto;
+        }
+        
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .results-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e9ecef;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .result-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .result-card.negative {
+            border-left-color: #e74c3c;
+        }
+        
+        .result-card.positive {
+            border-left-color: #27ae60;
+        }
+        
+        .result-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .metric-label {
+            color: #6c757d;
+        }
+        
+        .metric-value {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .metric-value.highlight {
+            color: #3498db;
+            font-size: 1.1em;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin: 30px 0;
+        }
+        
+        .recommendation-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border-left: 5px solid #e74c3c;
+        }
+        
+        .recommendation-box h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .recommendation-box ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .recommendation-box li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .recommendation-box li:before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .comparison-table th {
+            background: #2c3e50;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .comparison-table .western {
+            background: rgba(231, 76, 60, 0.1);
+        }
+        
+        .comparison-table .china {
+            background: rgba(39, 174, 96, 0.1);
+        }
+        
+        .footer {
+            background: white;
+            padding: 30px;
+            margin-top: 40px;
+            border-top: 3px solid #e74c3c;
+            text-align: center;
+        }
+        
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .case-study-selector {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .case-study-selector h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .case-study-btn {
+            background: white;
+            border: 2px solid #3498db;
+            color: #3498db;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .case-study-btn:hover {
+            background: #3498db;
+            color: white;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .success-box h4 {
+            color: #155724;
+            margin-bottom: 10px;
+        }
+        
+        .export-section {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .export-btn {
+            background: #28a745;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .export-btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>CGT Geographic Arbitrage Analyzer</h1>
+            <div class="subtitle">Strategic Framework for Portfolio Rationalization & Partnership Decisions</div>
+            <div class="author">Based on analysis of 46 FDA approvals and $65B in M&A activity | Lavinia Woodward</div>
+        </div>
+    </div>
+    
+    <div class="methodology-note">
+        <h3>⚠️ Professional Framework - Not a Valuation Model</h3>
+        <p>This tool applies the strategic insights from "The CGT Sector Realignment: Strategic Imperatives for 2025-2027" to provide directional guidance. For actual transactions, conduct detailed due diligence with appropriate financial and technical advisors.</p>
+        <p><strong>Data Sources:</strong> FDA CBER database, Nature Biotechnology success rates, McKinsey CGT reports, Alliance Management databases</p>
+    </div>
+    
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('arbitrage')">Geographic Arbitrage</button>
+            <button class="tab" onclick="switchTab('portfolio')">Portfolio Rationalization</button>
+            <button class="tab" onclick="switchTab('manufacturing')">Manufacturing Economics</button>
+            <button class="tab" onclick="switchTab('partnership')">Partnership Structuring</button>
+        </div>
+        
+        <div class="content">
+            <!-- Geographic Arbitrage Tab -->
+            <div id="arbitrage" class="tab-content active">
+                <h2>Geographic Arbitrage Analysis</h2>
+                <p>Compare Western vs China development pathways to identify value creation opportunities through geographic optimization.</p>
+                
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label>Therapy Type</label>
+                        <select id="arb-therapy">
+                            <option value="autologous-cart">Autologous CAR-T</option>
+                            <option value="allogeneic-cart">Allogeneic CAR-T</option>
+                            <option value="gene-therapy">Gene Therapy (AAV)</option>
+                            <option value="gene-editing">Gene Editing (in vivo)</option>
+                            <option value="stem-cell">Stem Cell Therapy</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Development Stage</label>
+                        <select id="arb-stage">
+                            <option value="preclinical">Preclinical</option>
+                            <option value="phase1">Phase 1</option>
+                            <option value="phase2">Phase 2</option>
+                            <option value="phase3">Phase 3</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Target Market Size ($M)</label>
+                        <input type="number" id="arb-market" value="2000" min="100" max="10000">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Number of Indications</label>
+                        <select id="arb-indications">
+                            <option value="1">Single Indication</option>
+                            <option value="2">2 Indications</option>
+                            <option value="3">3+ Indications (Platform)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <h3>Manufacturing Assumptions</h3>
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label>Western Manufacturing Cost/Patient</label>
+                        <input type="number" id="arb-west-cost" value="750000" min="100000" max="3000000">
+                        <small>Default based on therapy type</small>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>China Manufacturing Cost/Patient</label>
+                        <input type="number" id="arb-china-cost" value="300000" min="50000" max="1500000">
+                        <small>30-50% lower than Western</small>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Western Time to IND (days)</label>
+                        <input type="number" id="arb-west-time" value="180" min="90" max="365">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>China Time to IND (days)</label>
+                        <input type="number" id="arb-china-time" value="60" min="30" max="180">
+                    </div>
+                </div>
+                
+                <button class="calculate-btn" onclick="calculateArbitrage()">Analyze Geographic Arbitrage Opportunity</button>
+                
+                <div id="arbitrageResults" class="results-section" style="display: none;">
+                    <h3>Geographic Arbitrage Analysis Results</h3>
+                    
+                    <div class="results-grid">
+                        <div class="result-card western">
+                            <h3>Western Development Path</h3>
+                            <div class="metric">
+                                <span class="metric-label">NPV (Risk-Adjusted)</span>
+                                <span class="metric-value highlight" id="west-npv">-</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Time to Market</span>
+                                <span class="metric-value" id="west-time-market">-</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Total Development Cost</span>
+                                <span class="metric-value" id="west-dev-cost">-</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Probability of Success</span>
+                                <span class="metric-value" id="west-pos">-</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Break-Even Patients</span>
+                                <span class="metric-value" id="west-breakeven">-</span>
+                            </div>
+                        </div>
+                        
+                        <div class="result-card positive">
+                            <h3>China Development Path</h3>
+                            <div class="metric">
+                                <span class="metric-label">NPV (Risk-Adjusted)</span>
+                                <span class="metric-value highlight" id="china-npv">-</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Time to Market</span>
+                                <span class="metric-value" id="china-time-market">-</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Total Development Cost</span>
+                                <span class="metric-value" id="china-dev-cost">-</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Probability of Success</span>
+                                <span class="metric-value" id="china-pos">-</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Break-Even Patients</span>
+                                <span class="metric-value" id="china-breakeven">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="arbitrageChart"></canvas>
+                    </div>
+                    
+                    <div class="recommendation-box">
+                        <h3>Strategic Recommendation</h3>
+                        <div id="arb-recommendation"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Portfolio Rationalization Tab -->
+            <div id="portfolio" class="tab-content">
+                <h2>Portfolio Rationalization Framework</h2>
+                <p>Evaluate CGT assets against divestiture criteria to identify candidates for exit, partnership, or continued investment.</p>
+                
+                <div class="case-study-selector">
+                    <h3>Load Case Study</h3>
+                    <button class="case-study-btn" onclick="loadCaseStudy('roctavian')">Roctavian (Failure)</button>
+                    <button class="case-study-btn" onclick="loadCaseStudy('carvykti')">Carvykti (Success)</button>
+                    <button class="case-study-btn" onclick="loadCaseStudy('beqvez')">Beqvez (Divested)</button>
+                </div>
+                
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label>Asset Name</label>
+                        <input type="text" id="port-asset-name" placeholder="e.g., Program Alpha">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Current Development Stage</label>
+                        <select id="port-stage">
+                            <option value="preclinical">Preclinical</option>
+                            <option value="phase1">Phase 1</option>
+                            <option value="phase2">Phase 2</option>
+                            <option value="phase3">Phase 3</option>
+                            <option value="commercial">Commercial</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Current Manufacturing Cost/Patient</label>
+                        <input type="number" id="port-current-cost" value="1200000" min="100000" max="5000000">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Viable Threshold Cost/Patient</label>
+                        <input type="number" id="port-threshold-cost" value="500000" min="100000" max="2000000">
+                    </div>
+                </div>
+                
+                <h3>Strategic Assessment</h3>
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label>Automation Potential</label>
+                        <select id="port-automation">
+                            <option value="high">High (50%+ cost reduction possible)</option>
+                            <option value="medium">Medium (20-50% reduction)</option>
+                            <option value="low">Low (<20% reduction)</option>
+                            <option value="none">None (manual process required)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Number of Indications</label>
+                        <select id="port-indications">
+                            <option value="single">Single Indication</option>
+                            <option value="dual">2 Indications</option>
+                            <option value="platform">Platform (3+ indications)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Competitive Landscape</label>
+                        <select id="port-competition">
+                            <option value="first">First-in-class</option>
+                            <option value="best">Potential best-in-class</option>
+                            <option value="competitive">Competitive field</option>
+                            <option value="inferior">Superior alternatives exist</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Annual Revenue (if commercial)</label>
+                        <input type="number" id="port-revenue" value="0" min="0" max="5000000000">
+                    </div>
+                </div>
+                
+                <button class="calculate-btn" onclick="analyzePortfolio()">Analyze Portfolio Position</button>
+                
+                <div id="portfolioResults" class="results-section" style="display: none;">
+                    <h3>Portfolio Rationalization Analysis</h3>
+                    
+                    <div id="portfolio-recommendation"></div>
+                    
+                    <div class="chart-container">
+                        <div id="portfolioChart"></div>
+                    </div>
+                    
+                    <div class="results-grid">
+                        <div id="portfolio-metrics"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Manufacturing Economics Tab -->
+            <div id="manufacturing" class="tab-content">
+                <h2>Manufacturing Economics Analysis</h2>
+                <p>Model the impact of manufacturing optimization strategies on unit economics and commercial viability.</p>
+                
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label>Therapy Category</label>
+                        <select id="mfg-therapy" onchange="updateMfgDefaults()">
+                            <option value="autologous-cart">Autologous CAR-T</option>
+                            <option value="allogeneic-cart">Allogeneic CAR-T</option>
+                            <option value="gene-therapy">Gene Therapy</option>
+                            <option value="stem-cell">Stem Cell</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Current Cost/Patient</label>
+                        <input type="number" id="mfg-current" value="750000" min="50000" max="5000000">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Target Patient Population/Year</label>
+                        <input type="number" id="mfg-patients" value="500" min="10" max="10000">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Facility Capacity/Year</label>
+                        <input type="number" id="mfg-capacity" value="1000" min="100" max="10000">
+                    </div>
+                </div>
+                
+                <h3>Optimization Strategies</h3>
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label>Automation Investment ($M)</label>
+                        <input type="number" id="mfg-automation-invest" value="50" min="0" max="500">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Expected Cost Reduction (%)</label>
+                        <input type="range" id="mfg-reduction" min="0" max="70" value="30">
+                        <span class="slider-value" id="mfg-reduction-val">30%</span>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Process Optimization</label>
+                        <select id="mfg-process">
+                            <option value="manual">Current (Manual)</option>
+                            <option value="semi-auto">Semi-Automated</option>
+                            <option value="closed-loop">Closed-Loop System</option>
+                            <option value="ai-optimized">AI-Optimized</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Geographic Strategy</label>
+                        <select id="mfg-geography">
+                            <option value="western">Western Only</option>
+                            <option value="china">China Manufacturing</option>
+                            <option value="hybrid">Hybrid (West + China)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button class="calculate-btn" onclick="analyzeMfg()">Analyze Manufacturing Economics</button>
+                
+                <div id="mfgResults" class="results-section" style="display: none;">
+                    <h3>Manufacturing Economics Results</h3>
+                    <div id="mfg-analysis"></div>
+                </div>
+            </div>
+            
+            <!-- Partnership Structuring Tab -->
+            <div id="partnership" class="tab-content">
+                <h2>Partnership Structure Optimizer</h2>
+                <p>Design optimal deal terms based on geographic strategy and asset characteristics.</p>
+                
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label>Partnership Type</label>
+                        <select id="part-type">
+                            <option value="license">Out-License</option>
+                            <option value="codevelopment">Co-Development</option>
+                            <option value="acquisition">Full Acquisition</option>
+                            <option value="joint-venture">Joint Venture</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Partner Geography</label>
+                        <select id="part-geography">
+                            <option value="western">Western Partner</option>
+                            <option value="china">China Partner</option>
+                            <option value="global">Global Partnership</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Asset Type</label>
+                        <select id="part-asset">
+                            <option value="single">Single Asset</option>
+                            <option value="platform">Platform Technology</option>
+                            <option value="pipeline">Full Pipeline</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Development Stage</label>
+                        <select id="part-stage">
+                            <option value="preclinical">Preclinical</option>
+                            <option value="phase1">Phase 1</option>
+                            <option value="phase2">Phase 2</option>
+                            <option value="phase3">Phase 3</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <h3>Deal Economics</h3>
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label>Total Deal Value ($M)</label>
+                        <input type="number" id="part-value" value="500" min="10" max="5000">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Upfront Payment (%)</label>
+                        <input type="range" id="part-upfront" min="2" max="25" value="10">
+                        <span class="slider-value" id="part-upfront-val">10%</span>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Technology Transfer Included</label>
+                        <select id="part-tech-transfer">
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Manufacturing Rights</label>
+                        <select id="part-mfg-rights">
+                            <option value="partner">Partner Manufactures</option>
+                            <option value="originator">We Manufacture</option>
+                            <option value="shared">Shared Manufacturing</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button class="calculate-btn" onclick="optimizePartnership()">Optimize Partnership Structure</button>
+                
+                <div id="partnershipResults" class="results-section" style="display: none;">
+                    <h3>Optimized Partnership Structure</h3>
+                    <div id="partnership-analysis"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="export-section">
+            <h3>Export Analysis</h3>
+            <button class="export-btn" onclick="exportPDF()">📄 Export as PDF Report</button>
+            <button class="export-btn" onclick="exportExcel()">📊 Export to Excel</button>
+            <button class="export-btn" onclick="exportPresentation()">📽️ Create Presentation</button>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p><strong>CGT Geographic Arbitrage Analyzer</strong></p>
+        <p>Based on "The CGT Sector Realignment: Strategic Imperatives for 2025-2027"</p>
+        <p>Created by <a href="https://www.linkedin.com/in/lavinia-c-woodward/">Lavinia Woodward</a></p>
+        <p>© 2025 | Professional Framework for Strategic Decision Support</p>
+    </div>
+    
+    <script>
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Mark selected tab as active
+            event.target.classList.add('active');
+        }
+        
+        // Update slider values
+        document.getElementById('mfg-reduction').addEventListener('input', function() {
+            document.getElementById('mfg-reduction-val').textContent = this.value + '%';
+        });
+        
+        document.getElementById('part-upfront').addEventListener('input', function() {
+            document.getElementById('part-upfront-val').textContent = this.value + '%';
+        });
+        
+        // Geographic Arbitrage Calculator
+        function calculateArbitrage() {
+            const therapy = document.getElementById('arb-therapy').value;
+            const stage = document.getElementById('arb-stage').value;
+            const marketSize = parseFloat(document.getElementById('arb-market').value);
+            const indications = parseInt(document.getElementById('arb-indications').value);
+            const westCost = parseFloat(document.getElementById('arb-west-cost').value);
+            const chinaCost = parseFloat(document.getElementById('arb-china-cost').value);
+            const westTime = parseInt(document.getElementById('arb-west-time').value);
+            const chinaTime = parseInt(document.getElementById('arb-china-time').value);
+            
+            // Stage-based success rates
+            const successRates = {
+                'preclinical': 0.05,
+                'phase1': 0.10,
+                'phase2': 0.20,
+                'phase3': 0.60
+            };
+            
+            // Manufacturing failure adjustment (74% of CRLs)
+            const mfgSuccessWest = 0.26;
+            const mfgSuccessChina = 0.45; // Higher due to flexibility
+            
+            // Calculate NPVs
+            const baseSuccess = successRates[stage];
+            const westSuccess = baseSuccess * mfgSuccessWest;
+            const chinaSuccess = baseSuccess * mfgSuccessChina;
+            
+            // Time value adjustment
+            const timeValueFactor = Math.pow(1.1, (westTime - chinaTime) / 365);
+            
+            // Development costs (simplified)
+            const westDevCost = westCost * 10; // Simplified multiplier
+            const chinaDevCost = chinaCost * 8; // Lower multiplier
+            
+            // NPV calculation
+            const westNPV = (marketSize * westSuccess * indications * 1000000) - westDevCost;
+            const chinaNPV = (marketSize * chinaSuccess * indications * 1000000 * timeValueFactor) - chinaDevCost;
+            
+            // Break-even analysis
+            const westBreakeven = Math.ceil(westDevCost / (westCost * 0.3)); // Assuming 30% margin
+            const chinaBreakeven = Math.ceil(chinaDevCost / (chinaCost * 0.4)); // Higher margin
+            
+            // Update display
+            document.getElementById('west-npv').textContent = '$' + (westNPV / 1000000).toFixed(1) + 'M';
+            document.getElementById('china-npv').textContent = '$' + (chinaNPV / 1000000).toFixed(1) + 'M';
+            document.getElementById('west-time-market').textContent = (westTime + 1460) + ' days'; // Add clinical time
+            document.getElementById('china-time-market').textContent = (chinaTime + 1095) + ' days'; // Shorter clinical
+            document.getElementById('west-dev-cost').textContent = '$' + (westDevCost / 1000000).toFixed(1) + 'M';
+            document.getElementById('china-dev-cost').textContent = '$' + (chinaDevCost / 1000000).toFixed(1) + 'M';
+            document.getElementById('west-pos').textContent = (westSuccess * 100).toFixed(1) + '%';
+            document.getElementById('china-pos').textContent = (chinaSuccess * 100).toFixed(1) + '%';
+            document.getElementById('west-breakeven').textContent = westBreakeven.toLocaleString();
+            document.getElementById('china-breakeven').textContent = chinaBreakeven.toLocaleString();
+            
+            // Create comparison chart
+            const ctx = document.getElementById('arbitrageChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['NPV', 'Success Rate', 'Time to Market', 'Break-even Patients'],
+                    datasets: [{
+                        label: 'Western Development',
+                        data: [westNPV / 1000000, westSuccess * 100, westTime / 10, westBreakeven / 100],
+                        backgroundColor: 'rgba(231, 76, 60, 0.6)',
+                        borderColor: 'rgba(231, 76, 60, 1)',
+                        borderWidth: 2
+                    }, {
+                        label: 'China Development',
+                        data: [chinaNPV / 1000000, chinaSuccess * 100, chinaTime / 10, chinaBreakeven / 100],
+                        backgroundColor: 'rgba(39, 174, 96, 0.6)',
+                        borderColor: 'rgba(39, 174, 96, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            
+            // Generate recommendation
+            let recommendation = '<ul>';
+            
+            if (chinaNPV > westNPV * 1.5) {
+                recommendation += '<li><strong>Strong China Partnership Recommended:</strong> ' + 
+                    ((chinaNPV - westNPV) / 1000000).toFixed(1) + 'M additional value through geographic arbitrage</li>';
+            } else if (chinaNPV > westNPV) {
+                recommendation += '<li><strong>Consider China Partnership:</strong> Modest value enhancement of $' +
+                    ((chinaNPV - westNPV) / 1000000).toFixed(1) + 'M</li>';
+            } else {
+                recommendation += '<li><strong>Maintain Western Focus:</strong> Limited arbitrage opportunity</li>';
+            }
+            
+            if (westCost > 1000000) {
+                recommendation += '<li><strong>Unit Economics Critical:</strong> Current Western costs exceed viable threshold</li>';
+            }
+            
+            if (indications > 1) {
+                recommendation += '<li><strong>Platform Value:</strong> Multiple indications enhance partnership attractiveness</li>';
+            }
+            
+            recommendation += '<li><strong>Deal Structure:</strong> Target ' + 
+                (stage === 'preclinical' ? '2-5%' : '5-10%') + ' upfront with heavy back-ending</li>';
+            
+            recommendation += '</ul>';
+            
+            document.getElementById('arb-recommendation').innerHTML = recommendation;
+            document.getElementById('arbitrageResults').style.display = 'block';
+        }
+        
+        // Portfolio Rationalization
+        function analyzePortfolio() {
+            const assetName = document.getElementById('port-asset-name').value || 'Asset';
+            const stage = document.getElementById('port-stage').value;
+            const currentCost = parseFloat(document.getElementById('port-current-cost').value);
+            const thresholdCost = parseFloat(document.getElementById('port-threshold-cost').value);
+            const automation = document.getElementById('port-automation').value;
+            const indications = document.getElementById('port-indications').value;
+            const competition = document.getElementById('port-competition').value;
+            const revenue = parseFloat(document.getElementById('port-revenue').value);
+            
+            // Calculate viability gap
+            const gap = ((currentCost - thresholdCost) / thresholdCost * 100).toFixed(0);
+            
+            // Scoring system
+            let score = 0;
+            let factors = [];
+            
+            // Cost viability
+            if (currentCost <= thresholdCost) {
+                score += 30;
+                factors.push('✅ Unit economics viable');
+            } else if (currentCost <= thresholdCost * 1.5) {
+                score += 15;
+                factors.push('⚠️ Unit economics challenging');
+            } else {
+                factors.push('❌ Unit economics not viable (-' + gap + '% gap)');
+            }
+            
+            // Automation potential
+            if (automation === 'high') {
+                score += 25;
+                factors.push('✅ High automation potential');
+            } else if (automation === 'medium') {
+                score += 15;
+                factors.push('⚠️ Moderate automation potential');
+            } else {
+                factors.push('❌ Limited cost reduction pathway');
+            }
+            
+            // Platform value
+            if (indications === 'platform') {
+                score += 25;
+                factors.push('✅ Platform with multiple indications');
+            } else if (indications === 'dual') {
+                score += 15;
+                factors.push('⚠️ Dual indication potential');
+            } else {
+                factors.push('❌ Single indication limitation');
+            }
+            
+            // Competitive position
+            if (competition === 'first' || competition === 'best') {
+                score += 20;
+                factors.push('✅ Strong competitive position');
+            } else if (competition === 'competitive') {
+                score += 10;
+                factors.push('⚠️ Competitive field');
+            } else {
+                factors.push('❌ Superior alternatives available');
+            }
+            
+            // Generate recommendation
+            let recommendationHtml = '';
+            
+            if (score >= 70) {
+                recommendationHtml = `
+                    <div class="success-box">
+                        <h4>✅ CONTINUE INVESTMENT</h4>
+                        <p><strong>${assetName}</strong> shows strong strategic value with viable path to profitability.</p>
+                        <ul>${factors.map(f => '<li>' + f + '</li>').join('')}</ul>
+                        <p><strong>Action:</strong> Accelerate development with focus on manufacturing optimization</p>
+                    </div>`;
+            } else if (score >= 40) {
+                recommendationHtml = `
+                    <div class="warning-box">
+                        <h4>⚠️ STRATEGIC PARTNERSHIP RECOMMENDED</h4>
+                        <p><strong>${assetName}</strong> requires partnership to address economic challenges.</p>
+                        <ul>${factors.map(f => '<li>' + f + '</li>').join('')}</ul>
+                        <p><strong>Action:</strong> Seek China partnership for manufacturing arbitrage</p>
+                    </div>`;
+            } else {
+                recommendationHtml = `
+                    <div class="recommendation-box">
+                        <h4>🔴 DIVESTITURE CANDIDATE</h4>
+                        <p><strong>${assetName}</strong> fails to meet viability criteria.</p>
+                        <ul>${factors.map(f => '<li>' + f + '</li>').join('')}</ul>
+                        <p><strong>Action:</strong> Exit or out-license to maximize value recovery</p>
+                    </div>`;
+            }
+            
+            document.getElementById('portfolio-recommendation').innerHTML = recommendationHtml;
+            
+            // Create visualization using Plotly
+            const data = [{
+                x: [thresholdCost / 1000000],
+                y: [assetName],
+                name: 'Viable Threshold',
+                orientation: 'h',
+                marker: {
+                    color: 'rgba(39, 174, 96, 0.6)',
+                    width: 3
+                },
+                type: 'bar'
+            }, {
+                x: [currentCost / 1000000],
+                y: [assetName],
+                name: 'Current Cost',
+                orientation: 'h',
+                marker: {
+                    color: currentCost > thresholdCost ? 'rgba(231, 76, 60, 0.6)' : 'rgba(52, 152, 219, 0.6)',
+                    width: 3
+                },
+                type: 'bar'
+            }];
+            
+            const layout = {
+                title: 'Unit Economics Assessment',
+                xaxis: { title: 'Cost per Patient ($M)' },
+                barmode: 'group',
+                height: 300
+            };
+            
+            Plotly.newPlot('portfolioChart', data, layout);
+            
+            document.getElementById('portfolioResults').style.display = 'block';
+        }
+        
+        // Manufacturing Economics Analysis
+        function analyzeMfg() {
+            const therapy = document.getElementById('mfg-therapy').value;
+            const currentCost = parseFloat(document.getElementById('mfg-current').value);
+            const patients = parseInt(document.getElementById('mfg-patients').value);
+            const capacity = parseInt(document.getElementById('mfg-capacity').value);
+            const automationInvest = parseFloat(document.getElementById('mfg-automation-invest').value);
+            const reduction = parseFloat(document.getElementById('mfg-reduction').value) / 100;
+            const process = document.getElementById('mfg-process').value;
+            const geography = document.getElementById('mfg-geography').value;
+            
+            // Calculate optimized costs
+            let optimizedCost = currentCost * (1 - reduction);
+            
+            // Geographic adjustments
+            if (geography === 'china') {
+                optimizedCost *= 0.5; // Additional 50% reduction
+            } else if (geography === 'hybrid') {
+                optimizedCost *= 0.7; // 30% reduction
+            }
+            
+            // ROI calculation
+            const annualSavings = (currentCost - optimizedCost) * patients;
+            const roi = (annualSavings / (automationInvest * 1000000)) * 100;
+            const payback = (automationInvest * 1000000) / annualSavings;
+            
+            // Capacity utilization
+            const utilization = (patients / capacity) * 100;
+            
+            let analysisHtml = `
+                <div class="results-grid">
+                    <div class="result-card positive">
+                        <h3>Optimization Impact</h3>
+                        <div class="metric">
+                            <span class="metric-label">Current Cost/Patient</span>
+                            <span class="metric-value">$${currentCost.toLocaleString()}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Optimized Cost/Patient</span>
+                            <span class="metric-value highlight">$${Math.round(optimizedCost).toLocaleString()}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Cost Reduction</span>
+                            <span class="metric-value">${((1 - optimizedCost/currentCost) * 100).toFixed(0)}%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Annual Savings</span>
+                            <span class="metric-value">$${(annualSavings / 1000000).toFixed(1)}M</span>
+                        </div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3>Investment Analysis</h3>
+                        <div class="metric">
+                            <span class="metric-label">Automation Investment</span>
+                            <span class="metric-value">$${automationInvest}M</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">ROI (Annual)</span>
+                            <span class="metric-value highlight">${roi.toFixed(0)}%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Payback Period</span>
+                            <span class="metric-value">${payback.toFixed(1)} years</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Capacity Utilization</span>
+                            <span class="metric-value">${utilization.toFixed(0)}%</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add strategic recommendations
+            analysisHtml += '<div class="recommendation-box"><h3>Manufacturing Strategy</h3><ul>';
+            
+            if (roi > 50) {
+                analysisHtml += '<li><strong>High ROI:</strong> Automation investment strongly justified</li>';
+            }
+            
+            if (geography === 'western' && optimizedCost > 500000) {
+                analysisHtml += '<li><strong>Consider China Manufacturing:</strong> Could achieve additional 30-50% cost reduction</li>';
+            }
+            
+            if (utilization < 50) {
+                analysisHtml += '<li><strong>Excess Capacity:</strong> Consider partnership or CMO services</li>';
+            }
+            
+            analysisHtml += '</ul></div>';
+            
+            document.getElementById('mfg-analysis').innerHTML = analysisHtml;
+            document.getElementById('mfgResults').style.display = 'block';
+        }
+        
+        // Partnership Structure Optimizer
+        function optimizePartnership() {
+            const partType = document.getElementById('part-type').value;
+            const geography = document.getElementById('part-geography').value;
+            const assetType = document.getElementById('part-asset').value;
+            const stage = document.getElementById('part-stage').value;
+            const dealValue = parseFloat(document.getElementById('part-value').value);
+            const upfrontPct = parseFloat(document.getElementById('part-upfront').value);
+            const techTransfer = document.getElementById('part-tech-transfer').value;
+            const mfgRights = document.getElementById('part-mfg-rights').value;
+            
+            // Calculate optimal structure
+            const upfrontValue = dealValue * upfrontPct / 100;
+            const milestonesValue = dealValue - upfrontValue;
+            
+            // Geographic adjustments
+            let recommendedUpfront = upfrontPct;
+            if (geography === 'china') {
+                recommendedUpfront = Math.min(10, upfrontPct); // Cap at 10% for China
+            }
+            
+            let analysisHtml = `
+                <div class="comparison-table">
+                    <table>
+                        <tr>
+                            <th>Deal Component</th>
+                            <th>Standard Western Terms</th>
+                            <th>Optimized Structure</th>
+                            <th>Value Impact</th>
+                        </tr>
+                        <tr>
+                            <td>Upfront Payment</td>
+                            <td>$${(dealValue * 0.20).toFixed(0)}M (20%)</td>
+                            <td>$${upfrontValue.toFixed(0)}M (${upfrontPct}%)</td>
+                            <td>${upfrontPct < 20 ? '✅ Risk reduction' : '⚠️ Higher exposure'}</td>
+                        </tr>
+                        <tr>
+                            <td>Development Milestones</td>
+                            <td>$${(dealValue * 0.30).toFixed(0)}M</td>
+                            <td>$${(milestonesValue * 0.40).toFixed(0)}M</td>
+                            <td>Stage-gated risk</td>
+                        </tr>
+                        <tr>
+                            <td>Commercial Milestones</td>
+                            <td>$${(dealValue * 0.50).toFixed(0)}M</td>
+                            <td>$${(milestonesValue * 0.60).toFixed(0)}M</td>
+                            <td>Success-based value</td>
+                        </tr>
+                        <tr>
+                            <td>Technology Transfer</td>
+                            <td>Rarely included</td>
+                            <td>${techTransfer === 'yes' ? 'Included' : 'Not included'}</td>
+                            <td>${techTransfer === 'yes' ? '✅ Accelerates development' : '⚠️ Slower timeline'}</td>
+                        </tr>
+                        <tr>
+                            <td>Manufacturing</td>
+                            <td>Originator controlled</td>
+                            <td>${mfgRights}</td>
+                            <td>${mfgRights === 'partner' ? '✅ Cost arbitrage' : 'Control retained'}</td>
+                        </tr>
+                    </table>
+                </div>
+            `;
+            
+            // Add specific recommendations
+            analysisHtml += '<div class="recommendation-box"><h3>Partnership Optimization Strategy</h3><ul>';
+            
+            if (geography === 'china' && assetType === 'platform') {
+                analysisHtml += '<li><strong>Platform Premium:</strong> China partners value platform deals - negotiate 20-30% premium</li>';
+            }
+            
+            if (stage === 'preclinical' || stage === 'phase1') {
+                analysisHtml += '<li><strong>Early Stage Advantage:</strong> China partners prefer early assets for development flexibility</li>';
+            }
+            
+            if (techTransfer === 'yes' && geography === 'china') {
+                analysisHtml += '<li><strong>Tech Transfer Value:</strong> Can justify additional $50-100M in deal value</li>';
+            }
+            
+            analysisHtml += '<li><strong>Payment Structure:</strong> ' + recommendedUpfront + '% upfront recommended for risk/return balance</li>';
+            
+            analysisHtml += '</ul></div>';
+            
+            document.getElementById('partnership-analysis').innerHTML = analysisHtml;
+            document.getElementById('partnershipResults').style.display = 'block';
+        }
+        
+        // Case study loader
+        function loadCaseStudy(study) {
+            if (study === 'roctavian') {
+                document.getElementById('port-asset-name').value = 'Roctavian';
+                document.getElementById('port-stage').value = 'commercial';
+                document.getElementById('port-current-cost').value = '2900000';
+                document.getElementById('port-threshold-cost').value = '1000000';
+                document.getElementById('port-automation').value = 'low';
+                document.getElementById('port-indications').value = 'single';
+                document.getElementById('port-competition').value = 'inferior';
+                document.getElementById('port-revenue').value = '26000000';
+            } else if (study === 'carvykti') {
+                document.getElementById('port-asset-name').value = 'Carvykti';
+                document.getElementById('port-stage').value = 'commercial';
+                document.getElementById('port-current-cost').value = '450000';
+                document.getElementById('port-threshold-cost').value = '500000';
+                document.getElementById('port-automation').value = 'high';
+                document.getElementById('port-indications').value = 'platform';
+                document.getElementById('port-competition').value = 'best';
+                document.getElementById('port-revenue').value = '500000000';
+            } else if (study === 'beqvez') {
+                document.getElementById('port-asset-name').value = 'Beqvez';
+                document.getElementById('port-stage').value = 'phase3';
+                document.getElementById('port-current-cost').value = '2100000';
+                document.getElementById('port-threshold-cost').value = '800000';
+                document.getElementById('port-automation').value = 'none';
+                document.getElementById('port-indications').value = 'single';
+                document.getElementById('port-competition').value = 'competitive';
+                document.getElementById('port-revenue').value = '0';
+            }
+        }
+        
+        // Update manufacturing defaults based on therapy
+        function updateMfgDefaults() {
+            const therapy = document.getElementById('mfg-therapy').value;
+            const costDefaults = {
+                'autologous-cart': 750000,
+                'allogeneic-cart': 400000,
+                'gene-therapy': 2000000,
+                'stem-cell': 300000
+            };
+            document.getElementById('mfg-current').value = costDefaults[therapy];
+        }
+        
+        // Export functions
+        function exportPDF() {
+            const printWindow = window.open('', '_blank');
+            
+            // Gather all active results
+            let content = '<h1>CGT Geographic Arbitrage Analysis Report</h1>';
+            content += '<p>Generated: ' + new Date().toLocaleString() + '</p>';
+            
+            // Add visible results sections
+            const resultsToExport = [
+                'arbitrageResults',
+                'portfolioResults',
+                'mfgResults',
+                'partnershipResults'
+            ];
+            
+            resultsToExport.forEach(id => {
+                const element = document.getElementById(id);
+                if (element && element.style.display !== 'none') {
+                    content += element.innerHTML;
+                }
+            });
+            
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>CGT Analysis Report</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 40px; }
+                        h1, h2, h3 { color: #2c3e50; }
+                        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+                        th { background: #3498db; color: white; }
+                        @media print { body { padding: 20px; } }
+                    </style>
+                </head>
+                <body>
+                    ${content}
+                    <p style="margin-top: 50px; font-size: 12px; color: #666;">
+                        CGT Geographic Arbitrage Analyzer | Created by Lavinia Woodward<br>
+                        © 2025 | Professional Framework for Strategic Decision Support
+                    </p>
+                </body>
+                </html>
+            `);
+            
+            printWindow.document.close();
+            setTimeout(() => {
+                printWindow.print();
+            }, 250);
+        }
+        
+        function exportExcel() {
+            alert('Excel export would create a detailed spreadsheet with all calculations, sensitivity analyses, and scenario comparisons. Implementation requires backend processing for complex Excel generation.');
+        }
+        
+        function exportPresentation() {
+            alert('Presentation export would generate executive-ready slides with key findings, visualizations, and strategic recommendations. Implementation requires PowerPoint API integration.');
+        }
+    </script>
+</body>
+</html>
